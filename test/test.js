@@ -53,14 +53,21 @@ function test_puppeteerFetchPage(){
   const start_url = `https://www.hkexnews.hk/sdw/search/searchsdw.aspx`;
   hkex_parser.puppeteerFetchPage(start_url,'00700')
     .then(res => {
-      console.log(res)
+      console.log('done')
+    })
+}
+
+function test_fetchDailyStockList(){
+  hkex_parser.fetchDailyStockList(hkex_parser.getDailyStockListLink())
+    .then(page_raw => {
     })
 }
 
 function test_all() {
   // test_getStockList()
   // test_getDailyStockListLink()
-  test_puppeteerFetchPage()
+  // test_puppeteerFetchPage()
+  test_fetchDailyStockList()
 
   // test_parse_daily_stocklist(readFile(getFrozenPage(`daily_stock_list.html`)));
   // test_ccass_table_parser(readFile(getFrozenPage(`700.html`)));

@@ -55,7 +55,8 @@ async function test(stock_no){
 
 function start_scrape() {
 
-  return hkex_parser.fetchDailyStockList(hkex_parser.getDailyStockListLink())
+
+  hkex_parser.fetchDailyStockList(hkex_parser.getDailyStockListLink())
     .then(page_raw => {
       return hkex_parser.parseDailyStocklist(page_raw).then(res => {
         return Object.keys(res)
@@ -63,12 +64,10 @@ function start_scrape() {
     })
     .then(async stock_no_list=>{
       var temp = stock_no_list.slice(2,5)
-      for(var i =0; i< temp.length; i++ ){
-        console.log(temp[i])
-        // var _ = await test(temp[i])
-        var stock_no = temp[i]
 
-        var page_raw = await hkex_parser.puppeteerFetchPage(start_url, stock_no);
+      for(var i = 0; i<stock_no_list.length; i++){
+        var stock_no = stock_no_list[i]
+        var page_raw = await hkex_parser.puppeteerFetchPage(start_url, stock_no)
         fs.writeFileSync(`./_hkex_raw/${stock_no}.html`, page_raw);
 
         var result = {
@@ -77,8 +76,9 @@ function start_scrape() {
         };
 
         writeResult(`${RESULT_PATH}/${stock_no}_parse_result.json`,result)
+
       }
-      return false
+
     })
 }
 

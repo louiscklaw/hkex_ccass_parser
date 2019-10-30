@@ -17,7 +17,7 @@ var x = new Xray({
 });
 
 const launch_config = {
-  headless: false,
+  headless: true,
 
   defaultViewport: {
     width: 1920,
@@ -49,7 +49,7 @@ async function fetchDailyStockList(url_in, wait_for='body'){
   await page.waitForSelector(wait_for);
   var page_content = await page.content();
   // console.log(page_content)
-  await page.close()
+  await browser.close()
   return page_content
 }
 
@@ -58,6 +58,8 @@ async function puppeteerFetchPage(url_in, stock_no_in) {
   const page = await browser.newPage();
 
   var page_content = "";
+
+  console.log(stock_no_in)
 
   await page.goto(url_in);
 
