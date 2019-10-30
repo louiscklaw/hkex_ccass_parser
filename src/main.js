@@ -19,9 +19,6 @@ const STOCK_LIST = `${PROJ_HOME}/stock_list`
 
 var stock_to_scrape = [];
 
-function writeResult(path_in, json_in){
-  fs.writeFileSync(path_in, JSON.stringify(json_in));
-}
 
 function readStockList(path_in) {
   var output = [];
@@ -63,19 +60,21 @@ function start_scrape() {
       });
     })
     .then(async stock_no_list=>{
-      var temp = stock_no_list.slice(2,5)
-
       for(var i = 0; i<stock_no_list.length; i++){
         var stock_no = stock_no_list[i]
         var page_raw = await hkex_parser.puppeteerFetchPage(start_url, stock_no)
-        fs.writeFileSync(`./_hkex_raw/${stock_no}.html`, page_raw);
+
 
         var result = {
           summary: await hkex_parser.parseSummaryTable(page_raw),
           list: await hkex_parser.parseResultTable(page_raw)
         };
 
-        writeResult(`${RESULT_PATH}/${stock_no}_parse_result.json`,result)
+        // fs.writeFileSync(`./_hkex_raw/${stock_no}.html`, page_raw);
+        hkex_parser.save_raw_page(stock_no, page_raw)
+
+        // writeResult(`${RESULT_PATH}/${stock_no}_parse_result.json`,result)
+        hkex_parser.writeResult(stock_no, result)
 
       }
 
