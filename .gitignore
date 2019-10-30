@@ -1,0 +1,7 @@
+
+**/_result/*json
+**/_hkex_raw/*html
+**/screen_capture/*png
+node_modules
+
+*.log

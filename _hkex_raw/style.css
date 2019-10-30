@@ -1,0 +1,8 @@
+
+.ccass-search-datarow:nth-of-type(2) {
+  background-color: red !important;
+}
+
+#hkex_news_topbanner {
+  background-color: green
+}
