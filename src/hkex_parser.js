@@ -10,18 +10,48 @@ const chalk = require("chalk");
 
 const common = require(`${__dirname}/common.js`)
 
+const date_format = 'YYYYMMDD'
+
 var x = new Xray({
   filters: common.xray_filters
 });
 
 const launch_config = {
-  headless: true,
+  headless: false,
 
   defaultViewport: {
     width: 1920,
     height: 1080
   }
 };
+
+
+
+function getISODate(date=''){
+  if (date==''){
+    var d = new Date()
+    return d.toISOString().split('T')[0].replace(/-/g,'')
+  }else{
+    var d = new Date('2019-01-01')
+    return d.toISOString().split('T')[0].replace(/-/g,'')
+  }
+}
+
+function getDailyStockListLink(date=''){
+  var date_string = getISODate(date)
+  return `https://www.hkexnews.hk/sdw/search/stocklist.aspx?sortby=stockcode&shareholdingdate=${date_string}`
+}
+
+async function fetchDailyStockList(url_in, wait_for='body'){
+  var browser = await puppeteer.launch(launch_config);
+  var page = await browser.newPage();
+  await page.goto(url_in);
+  await page.waitForSelector(wait_for);
+  var page_content = await page.content();
+  // console.log(page_content)
+  await page.close()
+  return page_content
+}
 
 async function puppeteerFetchPage(url_in, stock_no_in) {
   const browser = await puppeteer.launch(launch_config);
@@ -37,7 +67,7 @@ async function puppeteerFetchPage(url_in, stock_no_in) {
 
   await page.click("#btnSearch");
   await page.waitForSelector(".ccass-search-result");
-  page_content = page.content();
+  page_content = await page.content();
 
   await page.screenshot({ path: `./screen_capture/stock_${stock_no_in}.png` });
   await browser.close();
@@ -93,11 +123,33 @@ function parseResultTable(html_content_in){
     })
 }
 
-async function helloWorld(fb_to_scrape) {
-  const browser = await puppeteer.launch(launch_config);
-  const page = await browser.newPage();
+function parseDailyStocklist(html_content_in){
+  return x(html_content_in, 'table@html')
+    .then(res => {
+      return x(res, 'tr',[{
+        stock_code: 'td:nth-of-type(1) | trim',
+        stock_name: 'td:nth-of-type(2) | trim'
+      }])
+        .then(res => {
+          var output = {};
+          res.forEach( entry => {
+            output[entry.stock_code] = entry.stock_name
+          })
+          return output
+        })
+    })
+}
+
+function helloworld() {
+  console.log('helloworld')
 }
 
 module.exports.puppeteerFetchPage = puppeteerFetchPage;
 module.exports.parseSummaryTable = parseSummaryTable;
 module.exports.parseResultTable = parseResultTable;
+module.exports.parseDailyStocklist = parseDailyStocklist;
+module.exports.getISODate = getISODate;
+module.exports.getDailyStockListLink = getDailyStockListLink;
+
+module.exports.fetchDailyStockList = fetchDailyStockList;
+module.exports.helloworld = helloworld;

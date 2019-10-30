@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 
+const chalk = require('chalk')
+
 function test_troubleshoot(text_in){
-  if (text_in == null){
-    return text_in
-  }else if (text_in.split("\n")[2] == undefined){
+  var try_split = text_in.split("\n")
+  if ([null, undefined].includes(try_split)){
     return text_in
   }else{
-    return text_in.split("\n")[2].trim()
+    return try_split[2].trim()
   }
 }
 
@@ -15,10 +16,20 @@ module.exports.xray_filters = {
     return txt_in;
   },
   num_related: text_in => {
-    return text_in == null ? text_in : text_in.match(/([\d|,|\.]+)/)[0].trim();
+    var try_split = text_in.match(/([\d|,|\.]+)/)
+    if ([null, undefined].includes(try_split)){
+      return text_in
+    }else{
+      return try_split[0].trim()
+    }
   },
   participant_id_cleanup: text_in => {
-    return text_in == null ? text_in : text_in.match(/(\w+\d+)/)[0].trim();
+    var try_split = text_in.match(/(\w+\d+)/)
+    if ([null, undefined].includes(try_split)){
+      return text_in
+    }else{
+      return try_split[0].trim()
+    }
   },
   participant_name_cleanup: text_in => {
     return test_troubleshoot(text_in);
@@ -32,5 +43,8 @@ module.exports.xray_filters = {
   },
   shareholding_percent_cleanup: text_in => {
     return test_troubleshoot(text_in);
+  },
+  trim: (text_in) =>{
+    return text_in.trim()
   }
 };
