@@ -32,7 +32,7 @@ function getISODate(date=''){
     var d = new Date()
     return d.toISOString().split('T')[0].replace(/-/g,'')
   }else{
-    var d = new Date('2019-01-01')
+    var d = new Date(date)
     return d.toISOString().split('T')[0].replace(/-/g,'')
   }
 }
@@ -71,7 +71,7 @@ async function puppeteerFetchPage(url_in, stock_no_in) {
   await page.waitForSelector(".ccass-search-result");
   page_content = await page.content();
 
-  await page.screenshot({ path: `./screen_capture/stock_${stock_no_in}.png` });
+  await page.screenshot({ path: `./screen_capture/stock_${stock_no_in}.png`, fullPage: true });
   await browser.close();
 
   return page_content;
