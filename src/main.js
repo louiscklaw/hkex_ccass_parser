@@ -51,8 +51,6 @@ async function test(stock_no){
 }
 
 function start_scrape() {
-
-
   hkex_parser.fetchDailyStockList(hkex_parser.getDailyStockListLink())
     .then(page_raw => {
       return hkex_parser.parseDailyStocklist(page_raw).then(res => {

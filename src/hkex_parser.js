@@ -41,7 +41,7 @@ var checkDirExist = dir_name => fs.existsSync(path.dirname(dir_name));
 
 function writeResult(stock_no, json_in) {
   var json_file_to_write = stock_json_filename(stock_no);
-  var json_file_path = path.dirname(json_file_to_write)
+  var json_file_path = path.dirname(json_file_to_write);
 
   if (!checkDirExist(json_file_to_write)) {
     prepareDirectory(json_file_path);
@@ -51,7 +51,7 @@ function writeResult(stock_no, json_in) {
 
 function save_raw_page(stock_no, page_raw) {
   var raw_file_to_write = stock_page_raw_filename(stock_no);
-  var raw_file_path = path.dirname(raw_file_to_write)
+  var raw_file_path = path.dirname(raw_file_to_write);
 
   if (!checkDirExist(raw_file_to_write)) {
     prepareDirectory(raw_file_path);
@@ -92,39 +92,53 @@ function getDailyStockListLink(date = "") {
 async function fetchDailyStockList(url_in, wait_for = "body") {
   var browser = await puppeteer.launch(launch_config);
   var page = await browser.newPage();
-  await page.goto(url_in);
-  await page.waitForSelector(wait_for);
-  var page_content = await page.content();
-  // console.log(page_content)
-  await browser.close();
-  return page_content;
+
+  try {
+    await page.goto(url_in);
+    await page.waitForSelector(wait_for);
+    var page_content = await page.content();
+    // console.log(page_content)
+    await browser.close();
+    return page_content;
+
+  } catch (err) {
+    await browser.close();
+  }
+
 }
 
 async function puppeteerFetchPage(url_in, stock_no_in) {
-  var page_content = "";
+
   console.log(`fetching ${stock_no_in} `);
   prepareDirectory(screen_capture_dir);
 
-  const browser = await puppeteer.launch(launch_config);
-  const page = await browser.newPage();
+  var browser = await puppeteer.launch(launch_config);
+  var page = await browser.newPage();
 
-  await page.goto(url_in);
+  try {
+    await page.goto(url_in);
 
-  await page.evaluate(stock_no_in => {
-    document.querySelector("#txtStockCode").value = stock_no_in;
-  }, stock_no_in);
+    await page.evaluate(stock_no_in => {
+      document.querySelector("#txtStockCode").value = stock_no_in;
+    }, stock_no_in);
 
-  await page.click("#btnSearch");
-  await page.waitForSelector(".ccass-search-result");
-  page_content = await page.content();
+    await page.click("#btnSearch");
+    await page.waitForSelector(".ccass-search-result");
+    var page_content = await page.content();
 
-  await page.screenshot({
-    path: `${screen_capture_dir}/stock_${stock_no_in}.png`,
-    fullPage: true
-  });
-  await browser.close();
+    await page.screenshot({
+      path: `${screen_capture_dir}/stock_${stock_no_in}.png`,
+      fullPage: true
+    });
+    await browser.close();
+    return page_content;
 
-  return page_content;
+  } catch (err) {
+    await browser.close();
+    throw err
+  }
+
+
 }
 
 function parse_ccass_search_summary_table(html_raw, row_wanted) {
