@@ -108,8 +108,6 @@ async function fetchDailyStockList(url_in, wait_for = "body") {
 }
 
 async function puppeteerFetchPage(url_in, stock_no_in) {
-
-  console.log(`fetching ${stock_no_in} `);
   prepareDirectory(screen_capture_dir);
 
   var browser = await puppeteer.launch(launch_config);
@@ -118,11 +116,16 @@ async function puppeteerFetchPage(url_in, stock_no_in) {
   try {
     await page.goto(url_in);
 
+    await page.waitForSelector('#txtStockCode')
     await page.evaluate(stock_no_in => {
       document.querySelector("#txtStockCode").value = stock_no_in;
     }, stock_no_in);
 
-    await page.click("#btnSearch");
+    var search_button_sel = '#btnSearch'
+    await page.waitForSelector(search_button_sel)
+    await page.click(search_button_sel);
+
+    // wait for search result
     await page.waitForSelector(".ccass-search-result");
     var page_content = await page.content();
 
@@ -135,7 +138,10 @@ async function puppeteerFetchPage(url_in, stock_no_in) {
 
   } catch (err) {
     await browser.close();
-    throw err
+
+    // throw err
+    console.log(chalk.red(`ERROR:found error on fetching ${stock_no_in}, skipping`))
+    console.log(`${url_in}`)
   }
 
 

@@ -51,6 +51,7 @@ async function test(stock_no){
 }
 
 function start_scrape() {
+  console.log('start')
   hkex_parser.fetchDailyStockList(hkex_parser.getDailyStockListLink())
     .then(page_raw => {
       return hkex_parser.parseDailyStocklist(page_raw).then(res => {
@@ -59,20 +60,28 @@ function start_scrape() {
     })
     .then(async stock_no_list=>{
       for(var i = 0; i<stock_no_list.length; i++){
-        var stock_no = stock_no_list[i]
-        var page_raw = await hkex_parser.puppeteerFetchPage(start_url, stock_no)
+        try {
 
+          console.log(`fetching ${stock_no} (${i}/${stock_no_list.length})`)
 
-        var result = {
-          summary: await hkex_parser.parseSummaryTable(page_raw),
-          list: await hkex_parser.parseResultTable(page_raw)
-        };
+          var stock_no = stock_no_list[i]
+          var page_raw = await hkex_parser.puppeteerFetchPage(start_url, stock_no)
 
-        // fs.writeFileSync(`./_hkex_raw/${stock_no}.html`, page_raw);
-        hkex_parser.save_raw_page(stock_no, page_raw)
+          // fs.writeFileSync(`./_hkex_raw/${stock_no}.html`, page_raw);
+          hkex_parser.save_raw_page(stock_no, page_raw)
 
-        // writeResult(`${RESULT_PATH}/${stock_no}_parse_result.json`,result)
-        hkex_parser.writeResult(stock_no, result)
+          var result = {
+            summary: await hkex_parser.parseSummaryTable(page_raw),
+            list: await hkex_parser.parseResultTable(page_raw)
+          };
+
+          // writeResult(`${RESULT_PATH}/${stock_no}_parse_result.json`,result)
+          hkex_parser.writeResult(stock_no, result)
+
+        } catch (err) {
+          console.log(`found err during processing ${stock_no}, skipping`)
+
+        }
 
       }
 

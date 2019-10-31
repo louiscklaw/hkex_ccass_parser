@@ -2,12 +2,21 @@
 
 const chalk = require('chalk')
 
+function checkUndefinedNull(obj_in){
+  return [null, undefined].includes(obj_in)
+}
+
 function test_troubleshoot(text_in){
   var try_split = text_in.split("\n")
-  if ([null, undefined].includes(try_split)){
+  if (checkUndefinedNull(try_split)){
     return text_in
   }else{
-    return try_split[2].trim()
+    if (checkUndefinedNull(try_split[2])){
+      console.log('try_split[2] found null')
+      return text_in
+    }else{
+      return try_split[2].trim()
+    }
   }
 }
 
@@ -17,7 +26,7 @@ module.exports.xray_filters = {
   },
   num_related: text_in => {
     var try_split = text_in.match(/([\d|,|\.]+)/)
-    if ([null, undefined].includes(try_split)){
+    if (checkUndefinedNull(try_split)){
       return text_in
     }else{
       return try_split[0].trim()
@@ -25,7 +34,7 @@ module.exports.xray_filters = {
   },
   participant_id_cleanup: text_in => {
     var try_split = text_in.match(/(\w+\d+)/)
-    if ([null, undefined].includes(try_split)){
+    if (checkUndefinedNull(try_split)){
       return text_in
     }else{
       return try_split[0].trim()
