@@ -56,15 +56,19 @@ function start_scrape() {
     .then(page_raw => {
       return hkex_parser.parseDailyStocklist(page_raw).then(res => {
         return Object.keys(res)
+          .filter(
+              x => !([null, undefined].includes(x))
+            )
+          .sort()
       });
     })
     .then(async stock_no_list=>{
       for(var i = 0; i<stock_no_list.length; i++){
         try {
+          var stock_no = stock_no_list[i]
 
           console.log(`fetching ${stock_no} (${i}/${stock_no_list.length})`)
 
-          var stock_no = stock_no_list[i]
           var page_raw = await hkex_parser.puppeteerFetchPage(start_url, stock_no)
 
           // fs.writeFileSync(`./_hkex_raw/${stock_no}.html`, page_raw);
@@ -79,6 +83,7 @@ function start_scrape() {
           hkex_parser.writeResult(stock_no, result)
 
         } catch (err) {
+          throw err
           console.log(`found err during processing ${stock_no}, skipping`)
 
         }

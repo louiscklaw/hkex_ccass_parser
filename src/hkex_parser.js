@@ -29,7 +29,8 @@ var x = new Xray({
 });
 
 const launch_config = {
-  headless: true,
+  // headless: false,
+  // slowMo: 250,
 
   defaultViewport: {
     width: 1920,
@@ -107,8 +108,18 @@ async function fetchDailyStockList(url_in, wait_for = "body") {
 
 }
 
-async function puppeteerFetchPage(url_in, stock_no_in) {
+async function saveScreenShot(page_in, path_in){
+  console.log(path_in)
+
   prepareDirectory(screen_capture_dir);
+  await page_in.screenshot({
+    path: path_in,
+    fullPage: true
+  });
+}
+
+async function puppeteerFetchPage(url_in, stock_no_in) {
+
 
   var browser = await puppeteer.launch(launch_config);
   var page = await browser.newPage();
@@ -126,20 +137,18 @@ async function puppeteerFetchPage(url_in, stock_no_in) {
     await page.click(search_button_sel);
 
     // wait for search result
-    await page.waitForSelector(".ccass-search-result");
+    await page.waitForSelector(".search-result-page");
     var page_content = await page.content();
 
-    await page.screenshot({
-      path: `${screen_capture_dir}/stock_${stock_no_in}.png`,
-      fullPage: true
-    });
+    // await saveScreenShot(page, `${screen_capture_dir}/stock_${stock_no_in}.jpg`)
+
     await browser.close();
     return page_content;
 
   } catch (err) {
     await browser.close();
 
-    // throw err
+    throw err
     console.log(chalk.red(`ERROR:found error on fetching ${stock_no_in}, skipping`))
     console.log(`${url_in}`)
   }
@@ -190,12 +199,12 @@ function parseResultTable(html_content_in) {
   return x(html_content_in, "#pnlResultNormal table tbody@html").then(res => {
     return x(res, "tr", [
       {
-        participant_id: ".col-participant-id | participant_id_cleanup",
-        participant_name: ".col-participant-name | participant_name_cleanup",
-        address: ".col-address | address_cleanup",
-        shareholding: ".col-shareholding | shareholding_cleanup",
+        participant_id: ".col-participant-id .mobile-list-body | participant_id_cleanup",
+        participant_name: ".col-participant-name .mobile-list-body | participant_name_cleanup",
+        address: ".col-address .mobile-list-body | address_cleanup",
+        shareholding: ".col-shareholding .mobile-list-body | shareholding_cleanup",
         shareholding_percent:
-          ".col-shareholding-percent | shareholding_percent_cleanup"
+          ".col-shareholding-percent .mobile-list-body | shareholding_percent_cleanup"
       }
     ]);
   });

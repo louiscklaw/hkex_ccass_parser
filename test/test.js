@@ -49,10 +49,11 @@ function test_getDailyStockListLink(){
   assert.notEqual(hkex_parser.getDailyStockListLink(),'')
 }
 
-function test_puppeteerFetchPage(){
+function test_puppeteerFetchPage(stock_number){
   const start_url = `https://www.hkexnews.hk/sdw/search/searchsdw.aspx`;
-  hkex_parser.puppeteerFetchPage(start_url,'00700')
+  hkex_parser.puppeteerFetchPage(start_url,stock_number)
     .then(res => {
+
       console.log('done')
     })
 }
@@ -63,15 +64,29 @@ function test_fetchDailyStockList(){
     })
 }
 
+function test_parseResultTable(page_raw){
+  hkex_parser.parseResultTable(page_raw)
+}
+
 function test_all() {
   // test_getStockList()
   // test_getDailyStockListLink()
-  // test_puppeteerFetchPage()
-  test_fetchDailyStockList()
+  // test_fetchDailyStockList()
+
 
   // test_parse_daily_stocklist(readFile(getFrozenPage(`daily_stock_list.html`)));
   // test_ccass_table_parser(readFile(getFrozenPage(`700.html`)));
   // test_parse_result_table(readFile(getFrozenPage(`700.html`)));
+
+  // test_ccass_table_parser(readFile(getFrozenPage(`00001.html`)));
+  // test_parse_result_table(readFile(getFrozenPage(`00001.html`)));
+
+  // test_ccass_table_parser(readFile(getFrozenPage(`00060.html`)));
+  // test_parse_result_table(readFile(getFrozenPage(`00060.html`)));
+
+  // test_puppeteerFetchPage('00006')
+  test_parseResultTable(readFile(getFrozenPage(`00006.html`)))
 }
+
 
 test_all();
