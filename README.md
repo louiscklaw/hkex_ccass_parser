@@ -15,3 +15,5 @@ txtSelPartID
 ```
 
 https://www.hkexnews.hk/sdw/search/stocklist.aspx?sortby=stockcode&shareholdingdate=20191028
+
+need to test 000nn
