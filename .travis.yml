@@ -1,0 +1,29 @@
+dist: bionic
+
+script:
+  - hostname
+
+# cache:
+#   directories:
+#     - $TRAVIS_BUILD_DIR/_ref_design
+
+after_success:
+  - id
+  - sudo apt update
+  - sudo apt install -y python3 python3-pip python3-dev python3-wheel python3-setuptools
+  - pip3 install --user pipenv
+  - cd _util
+  - pipenv sync
+  - pipenv run python3 merge.py
+  - pipenv run python3 shallow_submodule.py
+
+notifications:
+  slack:
+    secure: "FGdDEsE+bdSAxiNkTlVf5GjkGH+2u4yXj9ZKasxYT88vwfd/zGODlNhqdCrOY3K2f4eZ0k2KVuTRtvNxHZOamMUfLAtheLO63HUEaYxMd2bbJ3Jk+6oraPGSuqCAvFaaS++aerYpkN7C9V98MKSLsbYUWAqnScq8K8rNcHBmJnLqNkywd2VUSqnuFgdXEj8xKpdCs3guzrID7jpzyIzInRgJGuBc8cfB9loNjUvO51kUe81Sfhcu4vzgs4mpYCvkMuFZ+Sfkcdn16rW+xypj91h+hylHsSfE7O4GVqAfHDn9QpkpwkwP1NN25wUWbcpclutPWHTAu+v6khZo0ToLfZqIzscEsV1hQoSf5qnG+QaFYJQYQlN/6bHZgahpyMEsml3bwHFObhxRwN1P+V1qpzE/cFTtqQqD/ZVSleDuvf4KPy3LEBUNQbcXReTVGEWU7GOSBJLo10AWmfJdalYAQFFrA6x+5xNvxWgemOgww95Qmcn4TgkL8QApSG8NaCvmyp3gY8yAhUY7xqDrzxAWQNHBuBzj8HgY68eiOk1SJeTbkbMQz0aKwKVoZPReKq+gfRfswDlOg/ZraCDxTCVRvgHcwUDIMczZkhmfB4FYjzO4CmXinriEQp8vZhfyXc+zsP/tkVFOfwF+RySkYxta0aRjeJko/SwwuOx9ZeVr82M="                                       Pro Tip: You can add it automatically by running with --add.
+env:
+  global:
+    # SLACK_TOKEN
+    - secure: "yxj9tOJyPkVYCLCnMwkUpsS5Zb3zhcZFGzuJw9mOf5I+UbPfColIe7rheMKaTYP9tNkSVrw7dmvbFKiQIvVHqp5fbnaRcG999D2WasUBRaaSIR64YksmRixDWLLkQMH2AvvHXQRLsiduSJ5tHC4yajiKBgIJSli0qHQOX/2q3wNn8ECe0QvistptMRZi1UublupxfQZw472CtxnrFFEfYhyaC4SCicqj/e6iD2P2AfLrUxMPa+2V1jYDBgV1bxMb07Ot2cGGz+eY8LyRLYXaoea3WlDccksI2pcXi+VGlvvgZDIHL6GZoGYxozr/QBqA0EhKHPSGx1cV6CpZW9Bfm+jPLkJ8e7lsZ4Jgq/waww0OANaA5SJ134JWLuuV93chiM13PoRhO7egEO0Thng8trTAdYrIRMyOS31/rA22s1xqpXFjrBdF+uIzdaTvgsAEUeZE004gCW8sPqD/baLehUrTLI+K+VrkTNGa36iVVlCr/PwFJT6n+wj2IyKa37AzO/XIoPuRg68jbQN/3bjwhCvXlFSrckf52XDKlzBBtyxVBaZiYqzsklbOSb3mlJ2B4VTpmHQSBIoe5Bx1flo84aUqG52E0Kp7Md78cvg78qkR3F0AF+nE5dk42CaGcPGZAXU4/s6E49wm1yvd2ew8OQMBv4CvjNmKGHqnvMopZ0M="
+
+    # GITHUB_TOKEN
+    - secure: "KNMLCcE4ixiA2QDgc2StjxhPMsfb7S6roENqs/0/KAyX0BBgzecH0hdyVQDGodQcdfc/lvUOhwZ5rYp52hBZVP06XV68W6VhVfnx8UsuYpdb9BPugd2biifCdnrlTyYLePN5w4YdbzRUi/tx4fNqw3/Fn9wU2envoFpmwX3XER1ZlCkFW2CjtUSS+TOtZWTb3l38+TSdfVkeMutckUBb4C7ZA8kzywu3zFaMWkkDgMd8phanVpmPvpn3aLVnfOvuEuVLJfE9XOtwNlUeaB+3/UEJlVUOSiIUjRREfpRaG+es6MPN+riukTLwUiqWpLDp0aDSn7BLcnQstKgCR2DorDYrfyFysVhHGSRkxx0ya1He52vrTdXVUyr5AdFfUJFZj7AIzWVfhes1yIbXvVEexVmSjh2DDYup0LLno8pd6deTFZu83/P8VBRQXIkRWlFaOi00zSsmKuqlSxpFWeiKteLNwaavjVCc2KWCANND78bI+uNe5ltJKZFw2JwiTLuRpWVolpK6bO5pVsoDaPYuTH07uQ2bdxE9xYadp/rXv3IS5Zvzas3jutwM1Pc2zzaBVqg4a7pW0hbXe67fsL0QLnJUKxd5mDo9dVAEstDz+FCrTTmI+lf58JwL3ihoCvVnPtbKXxs8GYKhIGcrc15UM2KDQvSu7vpA+1dTu1mI03k="
