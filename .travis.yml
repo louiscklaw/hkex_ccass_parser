@@ -19,7 +19,8 @@ after_success:
 
 notifications:
   slack:
-    secure: "FGdDEsE+bdSAxiNkTlVf5GjkGH+2u4yXj9ZKasxYT88vwfd/zGODlNhqdCrOY3K2f4eZ0k2KVuTRtvNxHZOamMUfLAtheLO63HUEaYxMd2bbJ3Jk+6oraPGSuqCAvFaaS++aerYpkN7C9V98MKSLsbYUWAqnScq8K8rNcHBmJnLqNkywd2VUSqnuFgdXEj8xKpdCs3guzrID7jpzyIzInRgJGuBc8cfB9loNjUvO51kUe81Sfhcu4vzgs4mpYCvkMuFZ+Sfkcdn16rW+xypj91h+hylHsSfE7O4GVqAfHDn9QpkpwkwP1NN25wUWbcpclutPWHTAu+v6khZo0ToLfZqIzscEsV1hQoSf5qnG+QaFYJQYQlN/6bHZgahpyMEsml3bwHFObhxRwN1P+V1qpzE/cFTtqQqD/ZVSleDuvf4KPy3LEBUNQbcXReTVGEWU7GOSBJLo10AWmfJdalYAQFFrA6x+5xNvxWgemOgww95Qmcn4TgkL8QApSG8NaCvmyp3gY8yAhUY7xqDrzxAWQNHBuBzj8HgY68eiOk1SJeTbkbMQz0aKwKVoZPReKq+gfRfswDlOg/ZraCDxTCVRvgHcwUDIMczZkhmfB4FYjzO4CmXinriEQp8vZhfyXc+zsP/tkVFOfwF+RySkYxta0aRjeJko/SwwuOx9ZeVr82M="                                       Pro Tip: You can add it automatically by running with --add.
+    secure: "FGdDEsE+bdSAxiNkTlVf5GjkGH+2u4yXj9ZKasxYT88vwfd/zGODlNhqdCrOY3K2f4eZ0k2KVuTRtvNxHZOamMUfLAtheLO63HUEaYxMd2bbJ3Jk+6oraPGSuqCAvFaaS++aerYpkN7C9V98MKSLsbYUWAqnScq8K8rNcHBmJnLqNkywd2VUSqnuFgdXEj8xKpdCs3guzrID7jpzyIzInRgJGuBc8cfB9loNjUvO51kUe81Sfhcu4vzgs4mpYCvkMuFZ+Sfkcdn16rW+xypj91h+hylHsSfE7O4GVqAfHDn9QpkpwkwP1NN25wUWbcpclutPWHTAu+v6khZo0ToLfZqIzscEsV1hQoSf5qnG+QaFYJQYQlN/6bHZgahpyMEsml3bwHFObhxRwN1P+V1qpzE/cFTtqQqD/ZVSleDuvf4KPy3LEBUNQbcXReTVGEWU7GOSBJLo10AWmfJdalYAQFFrA6x+5xNvxWgemOgww95Qmcn4TgkL8QApSG8NaCvmyp3gY8yAhUY7xqDrzxAWQNHBuBzj8HgY68eiOk1SJeTbkbMQz0aKwKVoZPReKq+gfRfswDlOg/ZraCDxTCVRvgHcwUDIMczZkhmfB4FYjzO4CmXinriEQp8vZhfyXc+zsP/tkVFOfwF+RySkYxta0aRjeJko/SwwuOx9ZeVr82M="
+
 env:
   global:
     # SLACK_TOKEN
