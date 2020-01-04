@@ -15,7 +15,6 @@ after_success:
   - cd _util
   - pipenv sync
   - pipenv run python3 merge.py
-  - pipenv run python3 shallow_submodule.py
 
 notifications:
   slack:
