@@ -1,7 +1,10 @@
 dist: bionic
 
+install:
+  - yarn
+
 script:
-  - hostname
+  - node src/main.js
 
 # cache:
 #   directories:
