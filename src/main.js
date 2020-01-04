@@ -41,17 +41,23 @@ function readStockList(path_in) {
 }
 
 function start_scrape() {
+  console.log('start_scrape');
+
   var stock_to_scrape = readStockList(`${STOCK_LIST}`);
   stock_to_scrape.forEach(async stock_no => {
     var page_raw = await hkex_parser.puppeteerFetchPage(start_url, stock_no);
-    fs.writeFileSync(`./_hkex_raw/${stock_no}.html`, page_raw);
+    var temp_file = `./_hkex_raw/${stock_no}.html`;
+    console.log('temp file ', temp_file)
+    fs.writeFileSync(temp_file, page_raw);
 
     var result = {
       summary: await hkex_parser.parseSummaryTable(page_raw),
       list: await hkex_parser.parseResultTable(page_raw)
     };
 
-    writeResult(`${RESULT_PATH}/${stock_no}_parse_result.json`,result)
+    var json_file =`${RESULT_PATH}/${stock_no}_parse_result.json`
+    console.log('json_file', json_file)
+    writeResult(json_file,result)
   });
 }
 
